@@ -1,0 +1,14 @@
+{
+    "fullName": "John Doe",
+    "phoneNumber": "1234567890",
+    "email": "johndoe@example.com",
+    "password": "password123"
+}
+
+
+
+//login
+{
+    "email": "john.doe@example.com",
+    "password": "password123"
+}
