@@ -19,43 +19,95 @@ const Signup = () => {
   };
 
 
-  const handleSignup = (e) => {
-    e.preventDefault();
-  
-    const { name, phone, email, password } = formData;
-  
-    if (!name || !phone || !email || !password) {
-      setError('Please fill out all fields.');
-      return;
-    }
-  
-    const requestBody = {
-      fullName: name,
-      phoneNumber: phone,
-      email,
-      password,
-    };
-  
-    // Add loading state or spinner while waiting for the API response
-    setError('');
-    setSuccessMsg('');  // Clear previous messages
-  
-    axios.post('http://localhost:8000/api/user/register', requestBody)
-      .then((response) => {
-        setSuccessMsg('Signup successful! You can now log in.');
-        setError('');
-        console.log(response.data);
-        // Redirect to login page after successful signup
-        setTimeout(() => {
-          navigate('/login');
-        }, 1500);
-      })
-      .catch((error) => {
-        setError('Signup failed. Please try again.');
-        console.error('There was a problem with the fetch operation:', error);
-      });
+
+
+
+//   const handleSignup = (e) => {
+//   e.preventDefault();
+
+//   const { name, phone, email, password } = formData;
+
+//   if (!name || !phone || !email || !password) {
+//     setError('Please fill out all fields.');
+//     return;
+//   }
+
+//   const requestBody = {
+//     fullName: name,
+//     phoneNumber: phone,
+//     email,
+//     password,
+//   };
+
+//   try {
+//     console.log("Request Body to be sent:", requestBody);
+
+//     axios.post('http://localhost:8000/api/user/register', requestBody)
+//       .then((response) => {
+//         setSuccessMsg('Signup successful! You can now log in.');
+//         setError('');
+//         console.log(response.data);
+//         // Redirect to login page after successful signup
+//         setTimeout(() => {
+//           navigate('/login');
+//         }, 1500);
+//       })
+//       // .catch((error) => {
+//       //   setError('Signup failed. Please try again.');
+//       //   console.error('There was a problem with the fetch operation:', error);
+//       // });
+//       .catch((error) => {
+//         const errMsg = error.response?.data?.message || 'Signup failed. Please try again.';
+//         setError(errMsg);
+//         console.error('Signup failed:', error.response?.data || error);
+//       });
+        
+//   } catch (error) {
+//     setError('An error occurred during signup.');
+//     console.error('Error during signup:', error);
+//   }
+// };
+
+
+
+const handleSignup = async (e) => {
+  e.preventDefault();
+
+  const { name, phone, email, password } = formData;
+
+  if (!name || !phone || !email || !password) {
+    setError('Please fill out all fields.');
+    return;
+  }
+
+  const requestBody = {
+    fullName: name,
+    phoneNumber: phone,
+    email,
+    password,
   };
-  
+
+  try {
+    // console.log("Request Body to be sent:", requestBody);
+
+    const response = await axios.post('http://localhost:8000/api/user/register', requestBody);
+
+    setSuccessMsg('Signup successful! You can now log in.');
+    setError('');
+    console.log(response.data);
+
+    // Redirect to login page after successful signup
+    setTimeout(() => {
+      navigate('/login');
+    }, 1500);
+  } catch (error) {
+    const errMsg = error.response?.data?.message || 'Signup failed. Please try again.';
+    setError(errMsg);
+    console.error('Signup failed:', error.response?.data || error);
+  }
+};
+
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white shadow-md p-8 rounded-lg w-full max-w-md">

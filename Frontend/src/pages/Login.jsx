@@ -62,11 +62,11 @@ const Login = () => {
       const response = await axios.post('http://localhost:8000/api/user/login', {
         email,
         password,
-      });
+      })
   
       // console.log("User login response:", response.data);
   
-      // Adjust this condition based on actual backend structure
+     
       if (response.data.success || response.data.user) {
         setError('');
         login('user');
@@ -78,7 +78,9 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login error:", error);
-      setError('Something went wrong. Please try again.');
+      // setError('Something went wrong. Please try again.');
+      const errMsg = error.response?.data?.message || 'Something went wrong. Please try again.';
+      setError(errMsg);
     }
   };
   
