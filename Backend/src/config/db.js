@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(`mongodb+srv://shuvam012:NBi5A6lI5Nsd6wOh@codezen.qw01skz.mongodb.net/codeZen`, {
+        const conn = await mongoose.connect(`mongodb+srv://shuvam012:FhWzyOckwTFYeV7M@myprojects.wq7bmiu.mongodb.net/codeZen`, {
             // useNewUrlParser: true,
             // useUnifiedTopology: true
 
@@ -14,4 +15,6 @@ const connectDB = async () => {
     }
 }
 
-module.exports = connectDB;
+// module.exports = connectDB;
+
+export default connectDB

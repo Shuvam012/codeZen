@@ -1,16 +1,18 @@
+
+
+
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
     email: '',
     password: ''
   });
 
-  const [successMsg, setSuccessMsg] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -18,100 +20,53 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSignup = async (e) => {
+    e.preventDefault();
 
+    const { name, email, password } = formData;
 
+    // Basic Validation
+    if (!name || !email || !password) {
+      setError('Please fill out all fields.');
+      return;
+    }
 
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
+    }
 
-//   const handleSignup = (e) => {
-//   e.preventDefault();
+    try {
+      // Corrected URL: Port 3000 and /api/auth/register
+      // Corrected Body: Using 'name' to match your Mongoose Schema
+      const response = await axios.post('http://localhost:3000/api/auth/register', {
+        name,
+        email,
+        password,
+      });
 
-//   const { name, phone, email, password } = formData;
-
-//   if (!name || !phone || !email || !password) {
-//     setError('Please fill out all fields.');
-//     return;
-//   }
-
-//   const requestBody = {
-//     fullName: name,
-//     phoneNumber: phone,
-//     email,
-//     password,
-//   };
-
-//   try {
-//     console.log("Request Body to be sent:", requestBody);
-
-//     axios.post('http://localhost:8000/api/user/register', requestBody)
-//       .then((response) => {
-//         setSuccessMsg('Signup successful! You can now log in.');
-//         setError('');
-//         console.log(response.data);
-//         // Redirect to login page after successful signup
-//         setTimeout(() => {
-//           navigate('/login');
-//         }, 1500);
-//       })
-//       // .catch((error) => {
-//       //   setError('Signup failed. Please try again.');
-//       //   console.error('There was a problem with the fetch operation:', error);
-//       // });
-//       .catch((error) => {
-//         const errMsg = error.response?.data?.message || 'Signup failed. Please try again.';
-//         setError(errMsg);
-//         console.error('Signup failed:', error.response?.data || error);
-//       });
+      if (response.status === 201) {
+        toast.success('Signup successful! Redirecting to login...');
+        setError('');
         
-//   } catch (error) {
-//     setError('An error occurred during signup.');
-//     console.error('Error during signup:', error);
-//   }
-// };
-
-
-
-const handleSignup = async (e) => {
-  e.preventDefault();
-
-  const { name, phone, email, password } = formData;
-
-  if (!name || !phone || !email || !password) {
-    setError('Please fill out all fields.');
-    return;
-  }
-
-  const requestBody = {
-    fullName: name,
-    phoneNumber: phone,
-    email,
-    password,
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      }
+    } catch (error) {
+      const errMsg = error.response?.data?.message || 'Signup failed. Please try again.';
+      setError(errMsg);
+      toast.error(errMsg);
+      console.error('Signup failed:', error.response?.data || error);
+    }
   };
-
-  try {
-    // console.log("Request Body to be sent:", requestBody);
-
-    const response = await axios.post('http://localhost:8000/api/user/register', requestBody);
-
-    setSuccessMsg('Signup successful! You can now log in.');
-    setError('');
-    console.log(response.data);
-
-    // Redirect to login page after successful signup
-    setTimeout(() => {
-      navigate('/login');
-    }, 1500);
-  } catch (error) {
-    const errMsg = error.response?.data?.message || 'Signup failed. Please try again.';
-    setError(errMsg);
-    console.error('Signup failed:', error.response?.data || error);
-  }
-};
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white shadow-md p-8 rounded-lg w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-center mb-6">Sign Up for CodeZen</h2>
+        <h2 className="text-2xl font-semibold text-center mb-6">
+          Sign Up for <span className="text-blue-500">codeZen</span>
+        </h2>
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
@@ -121,20 +76,9 @@ const handleSignup = async (e) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full mt-1 border border-gray-300 rounded-md px-3 py-2 focus:ring focus:border-blue-500"
-              placeholder="Your Name"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full mt-1 border border-gray-300 rounded-md px-3 py-2 focus:ring focus:border-blue-500"
-              placeholder="1234567890"
+              className="w-full mt-1 border border-gray-300 rounded-md px-3 py-2 focus:ring focus:border-blue-500 outline-none"
+              placeholder="Enter your name"
+              required
             />
           </div>
 
@@ -145,8 +89,9 @@ const handleSignup = async (e) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full mt-1 border border-gray-300 rounded-md px-3 py-2 focus:ring focus:border-blue-500"
+              className="w-full mt-1 border border-gray-300 rounded-md px-3 py-2 focus:ring focus:border-blue-500 outline-none"
               placeholder="you@example.com"
+              required
             />
           </div>
 
@@ -157,20 +102,27 @@ const handleSignup = async (e) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full mt-1 border border-gray-300 rounded-md px-3 py-2 focus:ring focus:border-blue-500"
-              placeholder="Create a password"
+              className="w-full mt-1 border border-gray-300 rounded-md px-3 py-2 focus:ring focus:border-blue-500 outline-none"
+              placeholder="At least 6 characters"
+              required
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          {successMsg && <p className="text-green-500 text-sm">{successMsg}</p>}
+          {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition font-medium cursor-pointer"
           >
             Sign Up
           </button>
+
+          <p className="text-center text-gray-600 mt-4">
+            Already have an account? 
+            <Link to="/login" className="text-blue-500 hover:underline ml-1">
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </div>
