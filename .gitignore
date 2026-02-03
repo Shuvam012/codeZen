@@ -3,6 +3,7 @@ node_modules/
 
 # Environment
 .env
+.env.local
 
 # Frontend
 Frontend/node_modules/
@@ -18,3 +19,12 @@ Backend/.env
 
 
 ex.txt
+
+# Backend specific
+logs/
+*.log
+
+# Frontend specific (Vite/React)
+dist/
+build/
+*.local
