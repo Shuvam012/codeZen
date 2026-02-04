@@ -9,6 +9,8 @@ import connectDB from "./src/config/db.js"
 
 import authRoutes from "./src/routes/authRoutes.js"
 import adminQuizRoutes from "./src/routes/adminQuizRoutes.js"
+import quizAttemptRoutes from "./src/routes/quizAttemptRoutes.js"
+import leaderboardRoutes from "./src/routes/leaderboardRoutes.js"
 
 connectDB()
 
@@ -34,6 +36,9 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 app.use('/api/auth', authRoutes)
 app.use('/api/admin/quizzes', adminQuizRoutes)
+app.use('/api/quiz', quizAttemptRoutes)
+app.use("/api/leaderboard", leaderboardRoutes);
+
 
 
 app.listen(port,()=>{
