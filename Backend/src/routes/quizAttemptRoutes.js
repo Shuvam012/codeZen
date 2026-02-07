@@ -9,7 +9,8 @@ import {
     getPublicTopics,
     getQuizById,
     getTopics,
-    getQuizByTopic
+    getQuizByTopic,
+    getMyRecentAttempts
 } from "../controllers/quizAttemptController.js";
 
 const router = express.Router();
@@ -30,7 +31,7 @@ router.get("/:quizId/start", protect, startQuiz);
 router.post("/submit", protect, submitQuiz);
 router.get("/my/attempts", protect, getMyAttempts);
 router.get("/:id", getQuizById);
-
+router.get("/my-attempts", protect, getMyRecentAttempts);
 
 
 

@@ -1,71 +1,6 @@
-// import Quiz from "../models/Quiz.js";
-// import QuizAttempt from "../models/QuizAttempt.js";
 
 
-//  const getQuizForUser = async (req, res) => {
-//   const { quizId } = req.params;
-
-//   const quiz = await Quiz.findById(quizId).select("-questions.correctAnswer");
-
-//   if (!quiz) {
-//     return res.status(404).json({ message: "Quiz not found" });
-//   }
-
-//   res.json(quiz);
-// };
-
-
-
-//  const submitQuiz = async (req, res) => {
-//   const { quizId, answers } = req.body;
-
-//   const quiz = await Quiz.findById(quizId);
-//   if (!quiz) return res.status(404).json({ message: "Quiz not found" });
-
-//   let score = 0;
-
-//   quiz.questions.forEach((q) => {
-//     const userAnswer = answers.find(
-//       (a) => a.questionId.toString() === q._id.toString()
-//     );
-
-//     if (userAnswer && userAnswer.selectedOption === q.correctAnswer) {
-//       score++;
-//     }
-//   });
-
-//   const attempt = await QuizAttempt.create({
-//     user: req.user.id,
-//     quiz: quizId,
-//     answers,
-//     score,
-//     totalQuestions: quiz.questions.length,
-//   });
-
-//   res.status(201).json({
-//     message: "Quiz submitted successfully",
-//     score,
-//     totalQuestions: quiz.questions.length,
-//   });
-// };
-
-
-//  const getMyAttempts = async (req, res) => {
-//   const attempts = await QuizAttempt.find({ user: req.user.id })
-//     .populate("quiz", "topic")
-//     .sort({ createdAt: -1 });
-
-//   res.json(attempts);
-// };
-
-
-// export {
-//   getQuizForUser,
-//   submitQuiz,
-//   getMyAttempts,
-// };
-
-
+import mongoose from "mongoose";
 import Quiz from "../models/Quiz.js";
 import QuizAttempt from "../models/QuizAttempt.js";
 
@@ -236,65 +171,7 @@ const getPublicTopics = async (req, res) => {
   }
 };
 
-//  const getTopics = async (req, res) => {
-//   try {
-//     const topics = await Quiz.aggregate([
-//       {
-//         $group: {
-//           _id: "$topic",
-//           quizCount: { $sum: 1 },
-//           totalQuestions: { $sum: { $size: "$questions" } },
-//           estimatedTime: { $sum: "$timeLimit" }
-//         }
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//           topic: "$_id",
-//           quizCount: 1,
-//           totalQuestions: 1,
-//           estimatedTime: 1
-//         }
-//       }
-//     ]);
 
-//     res.status(200).json(topics);
-//   } catch (err) {
-//     res.status(500).json({ message: "Failed to fetch topics" });
-//   }
-// };
-
-// const getTopics = async (req, res) => {
-//   try {
-//     const topics = await Quiz.aggregate([
-//       {
-//         $group: {
-//           _id: "$topic",
-//           quizCount: { $sum: 1 },
-//           // Use $ifNull to ensure we always have an array before taking $size
-//           totalQuestions: { 
-//             $sum: { $size: { $ifNull: ["$questions", []] } } 
-//           },
-//           estimatedTime: { $sum: { $ifNull: ["$timeLimit", 0] } }
-//         }
-//       },
-//       {
-//         $project: {
-//           _id: 1, // Keep this as the unique ID for React keys
-//           topic: "$_id", // The name (e.g. JavaScript)
-//           quizCount: 1,
-//           totalQuestions: 1,
-//           estimatedTime: 1
-//         }
-//       }
-//     ]);
-
-//     res.status(200).json(topics);
-//   } catch (err) {
-//     console.error("Aggregation Error:", err); // Log the actual error to your terminal
-//     res.status(500).json({ message: "Failed to fetch topics", error: err.message });
-//   }
-// };
 
 
 const getTopics = async (req, res) => {
@@ -347,4 +224,206 @@ const getQuizByTopic = async (req, res) => {
 
 
 
-export { startQuiz, submitQuiz, getMyAttempts, getPublicTopics , getQuizById, getTopics , getQuizByTopic};
+//  const getMyRecentAttempts = async (req, res) => {
+//   try {
+//     if (!req.user || !req.user._id) {
+//       return res.status(401).json({ message: "Not authorized" });
+//     }
+
+//     const limit = parseInt(req.query.limit) || 5;
+
+//     const attempts = await QuizAttempt.find({ user: req.user._id })
+//       .sort({ submittedAt: -1, startedAt: -1 })
+//       .limit(limit)
+//       .populate("quiz", "title topic totalQuestions");
+
+//     res.status(200).json(attempts);
+//   } catch (err) {
+//     console.error("Fetch Recent Attempts Error:", err);
+//     res.status(500).json({ message: "Failed to load recent attempts", error: err.message });
+//   }
+// };
+
+// const getMyRecentAttempts = async (req, res) => {
+//   try {
+//     if (!req.user || !req.user.id) {
+//       return res.status(401).json({ message: "Not authorized" });
+//     }
+
+//     const limit = parseInt(req.query.limit) || 5;
+
+//     // Populate quiz, then map to add totalQuestions
+//     const attempts = await QuizAttempt.find({ user: req.user._id })
+//       .sort({ submittedAt: -1, startedAt: -1 })
+//       .limit(limit)
+//       .populate("quiz", "title topic questions");
+
+//     const formattedAttempts = attempts.map((attempt) => ({
+//       _id: attempt._id,
+//       score: attempt.score,
+//       totalQuestions: attempt.quiz?.questions.length || 0,
+//       startedAt: attempt.startedAt,
+//       submittedAt: attempt.submittedAt,
+//       quiz: {
+//         _id: attempt.quiz?._id,
+//         title: attempt.quiz?.title || "Untitled Quiz",
+//         topic: attempt.quiz?.topic || "No topic",
+//       },
+//     }));
+
+//     res.status(200).json(formattedAttempts);
+//   } catch (err) {
+//     console.error("Fetch Recent Attempts Error:", err);
+//     res.status(500).json({
+//       message: "Failed to load recent attempts",
+//       error: err.message,
+//     });
+//   }
+// };
+
+
+// const getMyRecentAttempts = async (req, res) => {
+//   try {
+//     console.log("getMyRecentAttempts called");
+//     console.log("req.user:", req.user);
+
+//     if (!req.user || !req.user._id) {
+//       return res.status(401).json({ message: "Not authorized" });
+//     }
+
+//     const limit = parseInt(req.query.limit) || 5;
+//     console.log("limit:", limit);
+
+//     const attempts = await QuizAttempt.find({ user: req.user._id })
+//       .sort({ submittedAt: -1, startedAt: -1 })
+//       .limit(limit)
+//       .populate("quiz", "title topic questions");
+
+//     console.log("attempts fetched:", attempts.length);
+
+//     const formattedAttempts = attempts.map((attempt) => ({
+//       _id: attempt._id,
+//       score: attempt.score,
+//       totalQuestions: attempt.quiz?.questions.length || 0,
+//       startedAt: attempt.startedAt,
+//       submittedAt: attempt.submittedAt,
+//       quiz: {
+//         _id: attempt.quiz?._id,
+//         title: attempt.quiz?.title || "Untitled Quiz",
+//         topic: attempt.quiz?.topic || "No topic",
+//       },
+//     }));
+
+//     console.log("formattedAttempts:", formattedAttempts);
+
+//     res.status(200).json(formattedAttempts);
+//   } catch (err) {
+//     console.error("Fetch Recent Attempts Error:", err);
+//     res.status(500).json({
+//       message: "Failed to load recent attempts",
+//       error: err.message,
+//     });
+//   }
+// };
+
+
+// const getMyRecentAttempts = async (req, res) => {
+//   try {
+//     console.log("getMyRecentAttempts called");
+//     console.log("req.user:", req.user);
+
+//     if (!req.user || !req.user._id) {
+//       console.log("User not authorized");
+//       return res.status(401).json({ message: "Not authorized" });
+//     }
+
+//     const limit = parseInt(req.query.limit) || 5;
+//     console.log("Limit:", limit);
+
+//     const attempts = await QuizAttempt.find({ user: req.user._id })
+//       .sort({ submittedAt: -1, startedAt: -1 })
+//       .limit(limit)
+//       .populate("quiz", "title topic questions")
+//       .exec();
+
+//     console.log("Attempts fetched:", attempts);
+
+//     const formattedAttempts = attempts.map((attempt) => ({
+//       _id: attempt._id,
+//       score: attempt.score,
+//       totalQuestions: attempt.quiz?.questions?.length || 0,
+//       startedAt: attempt.startedAt,
+//       submittedAt: attempt.submittedAt,
+//       quiz: {
+//         _id: attempt.quiz?._id,
+//         title: attempt.quiz?.title || "Untitled Quiz",
+//         topic: attempt.quiz?.topic || "No topic",
+//       },
+//     }));
+
+//     console.log("Formatted Attempts:", formattedAttempts);
+
+//     res.status(200).json(formattedAttempts);
+//   } catch (err) {
+//     console.error("Full Error in getMyRecentAttempts:", err);
+//     res.status(500).json({
+//       message: "Failed to load recent attempts",
+//       error: err.message,
+//     });
+//   }
+// };
+
+
+const getMyRecentAttempts = async (req, res) => {
+  try {
+    console.log("getMyRecentAttempts called");
+    console.log("req.user:", req.user);
+
+    if (!req.user || !req.user._id) {
+      console.log("User not authenticated");
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    const limit = parseInt(req.query.limit) || 5;
+    console.log("Limit:", limit);
+
+    const attempts = await QuizAttempt.find({ user: req.user._id, quiz: { $ne: null } })
+      .sort({ submittedAt: -1, startedAt: -1 })
+      .limit(limit)
+      .populate("quiz", "title topic questions")
+      .exec();
+
+    console.log("Attempts fetched:", attempts);
+
+    const formattedAttempts = attempts.map((attempt) => ({
+      _id: attempt._id,
+      score: attempt.score,
+      totalQuestions: attempt.quiz?.questions?.length || 0,
+      startedAt: attempt.startedAt,
+      submittedAt: attempt.submittedAt,
+      quiz: {
+        _id: attempt.quiz?._id,
+        title: attempt.quiz?.title || "Untitled Quiz",
+        topic: attempt.quiz?.topic || "No topic",
+      },
+    }));
+
+    console.log("Formatted attempts:", formattedAttempts);
+
+    res.status(200).json(formattedAttempts);
+  } catch (err) {
+    console.error("Full error in getMyRecentAttempts:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+
+
+
+
+
+
+
+export { startQuiz, submitQuiz, getMyAttempts, getPublicTopics , getQuizById, getTopics , getQuizByTopic,
+  getMyRecentAttempts}

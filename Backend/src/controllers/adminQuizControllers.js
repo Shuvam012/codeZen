@@ -97,65 +97,84 @@ import Quiz from "../models/Quiz.js";
 /* =========================
    CREATE QUIZ (ADMIN)
 ========================= */
+
 // const createQuiz = async (req, res) => {
 //   try {
-//     const { title, topic, questions,timeLimit } = req.body;
+//     const { title, topic, questions, timeLimit } = req.body;
 
-//     // Basic validation
-//     if (!title || !topic || !questions || questions.length === 0) {
-//       return res.status(400).json({
-//         message: "Title, topic and questions are required",
+//     if (!title || !topic || !questions || !timeLimit) {
+//       return res.status(400).json({ message: "All fields required" });
+//     }
+
+//     // 🔎 Check if quiz already exists for topic
+//     let quiz = await Quiz.findOne({ topic });
+
+//     if (quiz) {
+//       // ✅ Topic exists → add questions
+//       quiz.questions.push(...questions);
+//       quiz.timeLimit = timeLimit; // optional update
+//       await quiz.save();
+
+//       return res.status(200).json({
+//         message: "Questions added to existing quiz",
+//         quiz,
 //       });
 //     }
 
-//     // Validate questions structure
-//     for (const q of questions) {
-//       if (
-//         !q.question ||
-//         !Array.isArray(q.options) ||
-//         q.options.length < 2 ||
-//         q.correctAnswer === undefined
-//       ) {
-//         return res.status(400).json({
-//           message:
-//             "Each question must have question, options (min 2) and correctAnswer",
-//         });
-//       }
-//     }
-
-//     const quiz = await Quiz.create({
+//     // ❌ Topic does not exist → create new quiz
+//     quiz = await Quiz.create({
 //       title,
 //       topic,
 //       questions,
 //       timeLimit,
-//       createdBy: req.user.id, // admin ID from JWT
+//       // createdBy: req.user.id,
+//       createdBy: req.user?._id,
+
+      
 //     });
 
 //     res.status(201).json({
 //       message: "Quiz created successfully",
 //       quiz,
 //     });
+
 //   } catch (error) {
 //     console.error("Create Quiz Error:", error);
 //     res.status(500).json({ message: "Internal server error" });
 //   }
 // };
 
+
 const createQuiz = async (req, res) => {
   try {
     const { title, topic, questions, timeLimit } = req.body;
+
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     if (!title || !topic || !questions || !timeLimit) {
       return res.status(400).json({ message: "All fields required" });
     }
 
-    // 🔎 Check if quiz already exists for topic
+    for (const q of questions) {
+      if (
+        !q.question ||
+        !Array.isArray(q.options) ||
+        q.options.some(opt => !opt) ||
+        q.correctAnswer === undefined
+      ) {
+        return res.status(400).json({
+          message: "All questions must have text and options",
+        });
+      }
+    }
+
     let quiz = await Quiz.findOne({ topic });
 
     if (quiz) {
-      // ✅ Topic exists → add questions
       quiz.questions.push(...questions);
-      quiz.timeLimit = timeLimit; // optional update
+      quiz.timeLimit = timeLimit;
       await quiz.save();
 
       return res.status(200).json({
@@ -164,13 +183,12 @@ const createQuiz = async (req, res) => {
       });
     }
 
-    // ❌ Topic does not exist → create new quiz
     quiz = await Quiz.create({
       title,
       topic,
       questions,
       timeLimit,
-      createdBy: req.user.id,
+      createdBy: req.user.id, // ✅ FIXED
     });
 
     res.status(201).json({
@@ -183,6 +201,7 @@ const createQuiz = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 /* =========================
    GET ALL QUIZZES (ADMIN)

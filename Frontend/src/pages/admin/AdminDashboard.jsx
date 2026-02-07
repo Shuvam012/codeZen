@@ -1,523 +1,546 @@
-// import React, { useState } from 'react'
 
-// // const AdminDashboard = () => {
-// //   return (
-// //     <div>
-// //       Admin-Dashboard
-// //     </div>
-// //   )
-// // }
-
-// // export default AdminDashboard
-// const topics = ['Java', 'Python', 'Web Development', 'Computer Networks', 'DBMS', 'Operating Systems'];
+// import React from 'react';
+// import { Plus, FileText, HelpCircle, Layers } from 'lucide-react';
+// import AdminLayout from '../../components/admin/AdminLayout';
 
 // const AdminDashboard = () => {
-//   const [selectedTopic, setSelectedTopic] = useState(topics[0]);
-//   const [quizzes, setQuizzes] = useState([]); // Replace with actual data from backend later
-//   const [showForm, setShowForm] = useState(false);
-//   const [editingQuiz, setEditingQuiz] = useState(null);
-
-//   const handleCreateNew = () => {
-//     setEditingQuiz(null);
-//     setShowForm(true);
-//   };
-
-//   const handleEdit = (quiz) => {
-//     setEditingQuiz(quiz);
-//     setShowForm(true);
-//   };
-
-//   const handleDelete = (quizId) => {
-//     const updated = quizzes.filter(q => q.id !== quizId);
-//     setQuizzes(updated);
-//   };
-
-//   const handleSave = (quizData) => {
-//     if (editingQuiz) {
-//       const updated = quizzes.map(q => q.id === editingQuiz.id ? quizData : q);
-//       setQuizzes(updated);
-//     } else {
-//       setQuizzes([...quizzes, { ...quizData, id: Date.now() }]);
-//     }
-//     setShowForm(false);
-//   };
-
 //   return (
-//     <div className="p-6 bg-gray-100 min-h-screen">
-//       <h1 className="text-3xl font-semibold text-center mb-8">Admin Dashboard</h1>
-
-//       <div className="mb-6 flex flex-wrap gap-4 justify-center">
-//         {topics.map((topic) => (
-//           <button
-//             key={topic}
-//             onClick={() => setSelectedTopic(topic)}
-//             className={`px-4 py-2 rounded-xl ${selectedTopic === topic ? 'bg-blue-600 text-white' : 'bg-white text-blue-600 border border-blue-600'}`}
-//           >
-//             {topic}
+//     // WRAP everything inside the AdminLayout
+//     <AdminLayout>
+//       <div className="space-y-8">
+//         <div className="flex justify-between items-center">
+//           <h1 className="text-2xl font-black text-slate-900">System Overview</h1>
+//           <button className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+//             <Plus size={18} /> Create New Quiz
 //           </button>
-//         ))}
-//       </div>
-
-//       <div className="flex justify-center mb-6">
-//         <button
-//           onClick={handleCreateNew}
-//           className="bg-violet-600 text-white px-6 py-2 rounded-xl hover:bg-violet-700"
-//         >
-//           + Create New Quiz
-//         </button>
-//       </div>
-
-//       <QuizList
-//         topic={selectedTopic}
-//         quizzes={quizzes.filter(q => q.topic === selectedTopic)}
-//         onEdit={handleEdit}
-//         onDelete={handleDelete}
-//       />
-
-//       {showForm && (
-//         <QuizForm
-//           topic={selectedTopic}
-//           initialData={editingQuiz}
-//           onSave={handleSave}
-//           onCancel={() => setShowForm(false)}
-//         />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
-
-
-//------------------------------------------------
-// import React, { useState } from 'react';
-
-// const topics = ['Java', 'Python', 'Web Development', 'Computer Networks', 'DBMS', 'Operating Systems'];
-
-// const AdminDashboard = () => {
-//   const [selectedTopic, setSelectedTopic] = useState(topics[0]);
-//   const [quizzes, setQuizzes] = useState([]); // Replace with actual data from backend later
-//   const [showForm, setShowForm] = useState(false);
-//   const [editingQuiz, setEditingQuiz] = useState(null);
-
-//   const handleCreateNew = () => {
-//     setEditingQuiz(null);
-//     setShowForm(true);
-//   };
-
-//   const handleEdit = (quiz) => {
-//     setEditingQuiz(quiz);
-//     setShowForm(true);
-//   };
-
-//   const handleDelete = (quizId) => {
-//     const updated = quizzes.filter(q => q.id !== quizId);
-//     setQuizzes(updated);
-//   };
-
-//   const handleSave = (quizData) => {
-//     if (editingQuiz) {
-//       const updated = quizzes.map(q => q.id === editingQuiz.id ? quizData : q);
-//       setQuizzes(updated);
-//     } else {
-//       setQuizzes([...quizzes, { ...quizData, id: Date.now() }]);
-//     }
-//     setShowForm(false);
-//   };
-
-//   return (
-//     <div className="p-6 bg-gray-100 min-h-screen">
-//       <h1 className="text-3xl font-semibold text-center mb-8">Admin Dashboard</h1>
-
-//       <div className="mb-6 flex flex-wrap gap-4 justify-center">
-//         {topics.map((topic) => (
-//           <button
-//             key={topic}
-//             onClick={() => setSelectedTopic(topic)}
-//             className={`px-4 py-2 rounded-xl ${selectedTopic === topic ? 'bg-blue-600 text-white' : 'bg-white text-blue-600 border border-blue-600'}`}
-//           >
-//             {topic}
-//           </button>
-//         ))}
-//       </div>
-
-//       <div className="flex justify-center mb-6">
-//         <button
-//           onClick={handleCreateNew}
-//           className="bg-violet-600 text-white px-6 py-2 rounded-xl hover:bg-violet-700"
-//         >
-//           + Create New Quiz
-//         </button>
-//       </div>
-
-//       <div className="max-w-4xl mx-auto">
-//         {quizzes
-//           .filter(q => q.topic === selectedTopic)
-//           .map((quiz) => (
-//             <div key={quiz.id} className="bg-white shadow p-4 mb-4 rounded-lg">
-//               <div className="flex justify-between items-center">
-//                 <div>
-//                   <h2 className="text-lg font-semibold">{quiz.title}</h2>
-//                   <p className="text-sm text-gray-500">{quiz.questions.length} questions</p>
-//                 </div>
-//                 <div className="flex gap-2">
-//                   <button
-//                     onClick={() => handleEdit(quiz)}
-//                     className="text-blue-600 hover:underline"
-//                   >
-//                     Edit
-//                   </button>
-//                   <button
-//                     onClick={() => handleDelete(quiz.id)}
-//                     className="text-red-600 hover:underline"
-//                   >
-//                     Delete
-//                   </button>
-//                 </div>
-//               </div>
-//             </div>
-//         ))}
-//       </div>
-
-//       {showForm && (
-//         <div className="max-w-xl mx-auto bg-white shadow p-6 rounded-lg">
-//           <h2 className="text-xl font-semibold mb-4">{editingQuiz ? 'Edit Quiz' : 'Create Quiz'}</h2>
-//           <form
-//             onSubmit={(e) => {
-//               e.preventDefault();
-//               const title = e.target.title.value;
-//               const newQuiz = {
-//                 id: editingQuiz ? editingQuiz.id : Date.now(),
-//                 title,
-//                 topic: selectedTopic,
-//                 questions: editingQuiz?.questions || []
-//               };
-//               handleSave(newQuiz);
-//             }}
-//           >
-//             <div className="mb-4">
-//               <label className="block text-sm font-medium mb-1">Quiz Title</label>
-//               <input
-//                 name="title"
-//                 defaultValue={editingQuiz?.title || ''}
-//                 className="w-full border border-gray-300 rounded-md px-3 py-2"
-//                 required
-//               />
-//             </div>
-
-//             <div className="flex justify-end gap-4">
-//               <button
-//                 type="button"
-//                 onClick={() => setShowForm(false)}
-//                 className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
-//               >
-//                 Cancel
-//               </button>
-//               <button
-//                 type="submit"
-//                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-//               >
-//                 Save Quiz
-//               </button>
-//             </div>
-//           </form>
 //         </div>
-//       )}
-//     </div>
+
+//         {/* Stats Cards */}
+//         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//           <AdminStatCard label="Total Quizzes" value="24" icon={<FileText />} color="bg-blue-50 text-blue-600" />
+//           <AdminStatCard label="Total Questions" value="142" icon={<HelpCircle />} color="bg-purple-50 text-purple-600" />
+//           <AdminStatCard label="Active Topics" value="8" icon={<Layers />} color="bg-orange-50 text-orange-600" />
+//         </div>
+
+//         {/* Recent Quizzes Table */}
+//         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+//           <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+//             <h3 className="font-black text-slate-800">Recently Created Quizzes</h3>
+//             <button className="text-blue-600 text-sm font-bold hover:underline">View All</button>
+//           </div>
+//           <table className="w-full text-left">
+//             <thead className="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+//               <tr>
+//                 <th className="px-6 py-4">Title</th>
+//                 <th className="px-6 py-4">Topic</th>
+//                 <th className="px-6 py-4">Questions</th>
+//                 <th className="px-6 py-4">Time</th>
+//                 <th className="px-6 py-4 text-right">Actions</th>
+//               </tr>
+//             </thead>
+//             <tbody className="divide-y divide-slate-100">
+//               <QuizRow title="Modern React" topic="React" count="10" time="15m" />
+//               <QuizRow title="Data Structures 101" topic="DSA" count="15" time="20m" />
+//               <QuizRow title="SQL Mastery" topic="DBMS" count="12" time="15m" />
+//             </tbody>
+//           </table>
+//         </div>
+//       </div>
+//     </AdminLayout>
 //   );
 // };
+
+// // Helper components stay the same
+// const AdminStatCard = ({ label, value, icon, color }) => (
+//   <div className="bg-white p-6 rounded-3xl border border-slate-200 flex items-center gap-5 shadow-sm">
+//     <div className={`p-4 rounded-2xl ${color}`}>{icon}</div>
+//     <div>
+//       <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{label}</p>
+//       <p className="text-3xl font-black text-slate-900">{value}</p>
+//     </div>
+//   </div>
+// );
+
+// const QuizRow = ({ title, topic, count, time }) => (
+//   <tr className="hover:bg-slate-50 transition-colors">
+//     <td className="px-6 py-4 font-bold text-slate-800">{title}</td>
+//     <td className="px-6 py-4"><span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{topic}</span></td>
+//     <td className="px-6 py-4 text-sm font-medium text-slate-500">{count} Qs</td>
+//     <td className="px-6 py-4 text-sm font-medium text-slate-500">{time}</td>
+//     <td className="px-6 py-4 text-right">
+//       <button className="text-blue-600 font-bold text-xs hover:underline mr-4">Edit</button>
+//       <button className="text-red-500 font-bold text-xs hover:underline">Delete</button>
+//     </td>
+//   </tr>
+// );
+
+// export default AdminDashboard;  
+
+
+
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { Plus, FileText, HelpCircle, Layers } from "lucide-react";
+// import AdminLayout from "../../components/admin/AdminLayout";
+// import axios from "axios";
+
+// const AdminDashboard = () => {
+//   const [quizzes, setQuizzes] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState("");
+
+//   // Fetch quizzes from backend
+//   // useEffect(() => {
+//   //   const fetchQuizzes = async () => {
+//   //     try {
+//   //       setLoading(true);
+//   //       const { data } = await axios.get("/api/admin/quizzes"); // your admin route
+//   //       setQuizzes(data);
+//   //       setLoading(false);
+//   //     } catch (err) {
+//   //       console.error("Failed to fetch quizzes:", err);
+//   //       setError(err.response?.data?.message || "Server error");
+//   //       setLoading(false);
+//   //     }
+//   //   };
+
+//   //   fetchQuizzes();
+//   // }, []);
+
+
+//   useEffect(() => {
+//   const fetchQuizzes = async () => {
+//     try {
+//       setLoading(true);
+//       const { data } = await axios.get("/api/admin/quizzes");
+//       setQuizzes(Array.isArray(data) ? data : []); // <-- FIX HERE
+//       setLoading(false);
+//     } catch (err) {
+//       console.error("Failed to fetch quizzes:", err);
+//       setError(err.response?.data?.message || "Server error");
+//       setLoading(false);
+//     }
+//   };
+//   fetchQuizzes();
+// }, []);
+
+
+//   // Compute stats dynamically
+//   const totalQuizzes = quizzes.length;
+//   const totalQuestions = quizzes.reduce((sum, quiz) => sum + quiz.questions.length, 0);
+//   const activeTopics = [...new Set(quizzes.map(q => q.topic))].length;
+
+//   return (
+//     <AdminLayout>
+//       <div className="space-y-8">
+//         <div className="flex justify-between items-center">
+//           <h1 className="text-2xl font-black text-slate-900">System Overview</h1>
+//           <button className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+//             <Plus size={18} /> Create New Quiz
+//           </button>
+//         </div>
+
+//         {/* Stats Cards */}
+//         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//           <AdminStatCard label="Total Quizzes" value={totalQuizzes} icon={<FileText />} color="bg-blue-50 text-blue-600" />
+//           <AdminStatCard label="Total Questions" value={totalQuestions} icon={<HelpCircle />} color="bg-purple-50 text-purple-600" />
+//           <AdminStatCard label="Active Topics" value={activeTopics} icon={<Layers />} color="bg-orange-50 text-orange-600" />
+//         </div>
+
+//         {/* Recent Quizzes Table */}
+//         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+//           <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+//             <h3 className="font-black text-slate-800">Recently Created Quizzes</h3>
+//             <button className="text-blue-600 text-sm font-bold hover:underline">View All</button>
+//           </div>
+//           {loading ? (
+//             <p className="p-6 text-slate-500 font-bold">Loading quizzes...</p>
+//           ) : error ? (
+//             <p className="p-6 text-red-500 font-bold">{error}</p>
+//           ) : (
+//             <table className="w-full text-left">
+//               <thead className="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+//                 <tr>
+//                   <th className="px-6 py-4">Title</th>
+//                   <th className="px-6 py-4">Topic</th>
+//                   <th className="px-6 py-4">Questions</th>
+//                   <th className="px-6 py-4">Time</th>
+//                   <th className="px-6 py-4 text-right">Actions</th>
+//                 </tr>
+//               </thead>
+//               <tbody className="divide-y divide-slate-100">
+//                 {quizzes.map((quiz) => (
+//                   <QuizRow
+//                     key={quiz._id}
+//                     id={quiz._id}
+//                     title={quiz.title}
+//                     topic={quiz.topic}
+//                     count={quiz.questions.length}
+//                     time={`${quiz.timeLimit}m`}
+//                   />
+//                 ))}
+//               </tbody>
+//             </table>
+//           )}
+//         </div>
+//       </div>
+//     </AdminLayout>
+//   );
+// };
+
+// // Helper components
+// const AdminStatCard = ({ label, value, icon, color }) => (
+//   <div className="bg-white p-6 rounded-3xl border border-slate-200 flex items-center gap-5 shadow-sm">
+//     <div className={`p-4 rounded-2xl ${color}`}>{icon}</div>
+//     <div>
+//       <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{label}</p>
+//       <p className="text-3xl font-black text-slate-900">{value}</p>
+//     </div>
+//   </div>
+// );
+
+// const QuizRow = ({ id, title, topic, count, time }) => (
+//   <tr className="hover:bg-slate-50 transition-colors">
+//     <td className="px-6 py-4 font-bold text-slate-800">{title}</td>
+//     <td className="px-6 py-4">
+//       <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{topic}</span>
+//     </td>
+//     <td className="px-6 py-4 text-sm font-medium text-slate-500">{count} Qs</td>
+//     <td className="px-6 py-4 text-sm font-medium text-slate-500">{time}</td>
+//     <td className="px-6 py-4 text-right">
+//       <button className="text-blue-600 font-bold text-xs hover:underline mr-4">Edit</button>
+//       <button className="text-red-500 font-bold text-xs hover:underline">Delete</button>
+//     </td>
+//   </tr>
+// );
 
 // export default AdminDashboard;
 
 
 
-import React, { useState } from 'react';
 
-const initialTopics = [
-  {
-    name: 'Java',
-    questions: [
-      {
-        id: 1,
-        question: 'What is JVM?',
-        options: ['Java Virtual Machine', 'Java Variable Method', 'Join Virtual Module', 'None'],
-        correctAnswer: 'Java Virtual Machine',
-      },
-    ],
-  },
-  {
-    name: 'Python',
-    questions: [],
-  },
-  {
-    name: 'Web Development',
-    questions: [],
-  },
-];
+
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import { Plus, FileText, HelpCircle, Layers } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
+// import AdminLayout from "../../components/admin/AdminLayout";
+// import API from "../../api/axios";
+
+// const AdminDashboard = () => {
+//   const navigate = useNavigate();
+//   const [quizzes, setQuizzes] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   useEffect(() => {
+//     const fetchQuizzes = async () => {
+//       try {
+//         setLoading(true);
+//         const { data } = await API.get("/admin/quizzes"); // your backend route
+//         setQuizzes(Array.isArray(data) ? data : []); // ensure it's an array
+//         setLoading(false);
+//       } catch (err) {
+//         console.error("Failed to fetch quizzes:", err);
+//         setError(err.response?.data?.message || "Server error");
+//         setLoading(false);
+//       }
+//     };
+//     fetchQuizzes();
+//   }, []);
+
+//   // const navigate = useNavigate();
+
+//   // Compute stats dynamically
+//   const totalQuizzes = quizzes.length;
+//   const totalQuestions = quizzes.reduce((sum, quiz) => sum + (quiz.questions?.length || 0), 0);
+//   const activeTopics = [...new Set(quizzes.map(q => q.topic))].length;
+
+//   return (
+//     <AdminLayout>
+//       <div className="space-y-8">
+//         <div className="flex justify-between items-center">
+//           <h1 className="text-2xl font-black text-slate-900">System Overview</h1>
+//           <button
+//           // onClick={navigate }
+//           onClick={() => navigate("/add-quiz")}
+//           // HOW TO add  ADDQuiz page
+
+
+//           className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+//             <Plus size={18} /> Create New Quiz
+//           </button>
+//         </div>
+
+//         {loading ? (
+//           <p>Loading...</p>
+//         ) : error ? (
+//           <p className="text-red-500">{error}</p>
+//         ) : (
+//           <>
+//             {/* Stats Cards */}
+//             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//               <AdminStatCard label="Total Quizzes" value={totalQuizzes} icon={<FileText />} color="bg-blue-50 text-blue-600" />
+//               <AdminStatCard label="Total Questions" value={totalQuestions} icon={<HelpCircle />} color="bg-purple-50 text-purple-600" />
+//               <AdminStatCard label="Active Topics" value={activeTopics} icon={<Layers />} color="bg-orange-50 text-orange-600" />
+//             </div>
+
+//             {/* Recent Quizzes Table */}
+//             <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+//               <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+//                 <h3 className="font-black text-slate-800">Recently Created Quizzes</h3>
+//                 <button className="text-blue-600 text-sm font-bold hover:underline">View All</button>
+//               </div>
+//               <table className="w-full text-left">
+//                 <thead className="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+//                   <tr>
+//                     <th className="px-6 py-4">Title</th>
+//                     <th className="px-6 py-4">Topic</th>
+//                     <th className="px-6 py-4">Questions</th>
+//                     <th className="px-6 py-4">Time</th>
+//                     <th className="px-6 py-4 text-right">Actions</th>
+//                   </tr>
+//                 </thead>
+//                 <tbody className="divide-y divide-slate-100">
+//                   {quizzes.map((quiz) => (
+//                     <QuizRow
+//                       key={quiz._id}
+//                       title={quiz.title}
+//                       topic={quiz.topic}
+//                       count={quiz.questions.length}
+//                       time={quiz.timeLimit + "m"}
+//                     />
+//                   ))}
+//                 </tbody>
+//               </table>
+//             </div>
+//           </>
+//         )}
+//       </div>
+//     </AdminLayout>
+//   );
+// };
+
+// const AdminStatCard = ({ label, value, icon, color }) => (
+//   <div className="bg-white p-6 rounded-3xl border border-slate-200 flex items-center gap-5 shadow-sm">
+//     <div className={`p-4 rounded-2xl ${color}`}>{icon}</div>
+//     <div>
+//       <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{label}</p>
+//       <p className="text-3xl font-black text-slate-900">{value}</p>
+//     </div>
+//   </div>
+// );
+
+// const QuizRow = ({ title, topic, count, time }) => (
+//   <tr className="hover:bg-slate-50 transition-colors">
+//     <td className="px-6 py-4 font-bold text-slate-800">{title}</td>
+//     <td className="px-6 py-4"><span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{topic}</span></td>
+//     <td className="px-6 py-4 text-sm font-medium text-slate-500">{count} Qs</td>
+//     <td className="px-6 py-4 text-sm font-medium text-slate-500">{time}</td>
+//     <td className="px-6 py-4 text-right">
+//       <button 
+//       onClick={() => navigate(`/admin/quizzes/edit/${quiz._id}`)}
+      
+//       className="text-blue-600 font-bold text-xs hover:underline mr-4">Edit</button>
+//       <button className="text-red-500 font-bold text-xs hover:underline">Delete</button>
+//     </td>
+//   </tr>
+// );
+
+// export default AdminDashboard;
+
+
+
+
+
+
+import React, { useEffect, useState } from "react";
+import { Plus, FileText, HelpCircle, Layers } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import AdminLayout from "../../components/admin/AdminLayout";
+import API from "../../api/axios";
 
 const AdminDashboard = () => {
-  const [topics, setTopics] = useState(initialTopics);
-  const [selectedTopic, setSelectedTopic] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [editingQuestion, setEditingQuestion] = useState(null);
+  const navigate = useNavigate();
 
-  const handleSelectTopic = (topicName) => {
-    setSelectedTopic(topicName);
-    setShowForm(false);
-    setEditingQuestion(null);
-  };
+  const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleDelete = (questionId) => {
-    const updatedTopics = topics.map(topic => {
-      if (topic.name === selectedTopic) {
-        return {
-          ...topic,
-          questions: topic.questions.filter(q => q.id !== questionId)
-        };
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        setLoading(true);
+        const { data } = await API.get("/admin/quizzes");
+
+        // SAFETY: ensure array
+        setQuizzes(Array.isArray(data) ? data : []);
+        setError("");
+      } catch (err) {
+        console.error("Failed to fetch quizzes:", err);
+        setError(err.response?.data?.message || "Server error");
+      } finally {
+        setLoading(false);
       }
-      return topic;
-    });
-    setTopics(updatedTopics);
-  };
+    };
 
-  const handleSave = (questionData) => {
-    const updatedTopics = topics.map(topic => {
-      if (topic.name === selectedTopic) {
-        if (editingQuestion) {
-          return {
-            ...topic,
-            questions: topic.questions.map(q => q.id === editingQuestion.id ? questionData : q)
-          };
-        } else {
-          return {
-            ...topic,
-            questions: [...topic.questions, { ...questionData, id: Date.now() }]
-          };
-        }
-      }
-      return topic;
-    });
-    setTopics(updatedTopics);
-    setShowForm(false);
-    setEditingQuestion(null);
-  };
+    fetchQuizzes();
+  }, []);
 
-  const selected = topics.find(t => t.name === selectedTopic);
+  /* -------------------- Stats -------------------- */
+  const totalQuizzes = quizzes.length;
+
+  const totalQuestions = quizzes.reduce(
+    (sum, quiz) => sum + (quiz.questions?.length || 0),
+    0
+  );
+
+  const activeTopics = new Set(quizzes.map((q) => q.topic)).size;
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-semibold text-center mb-8">Admin Dashboard</h1>
+    <AdminLayout>
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-black text-slate-900">
+            System Overview
+          </h1>
 
-      {!selectedTopic ? (
-        <div className="grid md:grid-cols-3 gap-6">
-          {topics.map((topic) => (
-            <div
-              key={topic.name}
-              onClick={() => handleSelectTopic(topic.name)}
-              className="cursor-pointer bg-white rounded-xl shadow p-6 hover:shadow-md"
-            >
-              <h2 className="text-xl font-bold mb-2">{topic.name}</h2>
-              <p className="text-gray-600">{topic.questions.length} questions</p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <>
           <button
-            onClick={() => setSelectedTopic(null)}
-            className="mb-4 text-blue-600 hover:underline"
+            onClick={() => navigate("/add-quiz")}
+            className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-200"
           >
-            ← Back to Topics
+            <Plus size={18} />
+            Create New Quiz
           </button>
+        </div>
 
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">{selectedTopic} - Questions</h2>
-            <button
-              onClick={() => {
-                setEditingQuestion(null);
-                setShowForm(true);
-              }}
-              className="bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700"
-            >
-              + Add Question
-            </button>
-          </div>
+        {/* Loading / Error */}
+        {loading && <p>Loading...</p>}
+        {error && <p className="text-red-500">{error}</p>}
 
-          <div className="overflow-x-auto bg-white rounded-xl shadow">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="px-4 py-2">Question</th>
-                  <th className="px-4 py-2">Correct Answer</th>
-                  <th className="px-4 py-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selected?.questions.map((q) => (
-                  <tr key={q.id} className="border-t">
-                    <td className="px-4 py-2">{q.question}</td>
-                    <td className="px-4 py-2">{q.correctAnswer}</td>
-                    <td className="px-4 py-2">
-                      <button
-                        onClick={() => {
-                          setEditingQuestion(q);
-                          setShowForm(true);
-                        }}
-                        className="text-blue-600 hover:underline mr-4"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(q.id)}
-                        className="text-red-600 hover:underline"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {!loading && !error && (
+          <>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <AdminStatCard
+                label="Total Quizzes"
+                value={totalQuizzes}
+                icon={<FileText />}
+                color="bg-blue-50 text-blue-600"
+              />
 
-          {showForm && (
-            <div className="mt-6 bg-white p-6 rounded-xl shadow max-w-2xl mx-auto">
-              <h3 className="text-xl font-semibold mb-4">
-                {editingQuestion ? 'Edit Question' : 'Add Question'}
-              </h3>
-              {/* <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const question = e.target.question.value;
-                  const correctAnswer = e.target.correctAnswer.value;
-                  handleSave({
-                    id: editingQuestion?.id || Date.now(),
-                    question,
-                    correctAnswer,
-                    options: [],
-                  });
-                }}
-              >
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-1">Question</label>
-                  <input
-                    name="question"
-                    defaultValue={editingQuestion?.question || ''}
-                    className="w-full border px-3 py-2 rounded"
-                    required
-                  />
-                </div>
+              <AdminStatCard
+                label="Total Questions"
+                value={totalQuestions}
+                icon={<HelpCircle />}
+                color="bg-purple-50 text-purple-600"
+              />
 
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-1">Correct Answer</label>
-                  <input
-                    name="correctAnswer"
-                    defaultValue={editingQuestion?.correctAnswer || ''}
-                    className="w-full border px-3 py-2 rounded"
-                    required
-                  />
-                </div>
-
-                <div className="flex justify-end gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className="px-4 py-2 bg-gray-300 rounded"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  >
-                    Save
-                  </button>
-                </div>
-              </form> */}
-              ...
-<form
-  onSubmit={(e) => {
-    e.preventDefault();
-    const question = e.target.question.value;
-    const options = [
-      e.target.option1.value,
-      e.target.option2.value,
-      e.target.option3.value,
-      e.target.option4.value
-    ];
-    const correctAnswer = e.target.correctAnswer.value;
-    handleSave({
-      id: editingQuestion?.id || Date.now(),
-      question,
-      options,
-      correctAnswer,
-    });
-  }}
->
-  <div className="mb-4">
-    <label className="block text-sm font-medium mb-1">Question</label>
-    <input
-      name="question"
-      defaultValue={editingQuestion?.question || ''}
-      className="w-full border px-3 py-2 rounded"
-      required
-    />
-  </div>
-
-  {[1, 2, 3, 4].map((num) => (
-    <div key={num} className="mb-4">
-      <label className="block text-sm font-medium mb-1">Option {num}</label>
-      <input
-        name={`option${num}`}
-        defaultValue={editingQuestion?.options?.[num - 1] || ''}
-        className="w-full border px-3 py-2 rounded"
-        required
-      />
-    </div>
-  ))}
-
-  <div className="mb-4">
-    <label className="block text-sm font-medium mb-1">Correct Answer</label>
-    <select
-      name="correctAnswer"
-      defaultValue={editingQuestion?.correctAnswer || ''}
-      className="w-full border px-3 py-2 rounded"
-      required
-    >
-      <option value="">Select correct answer</option>
-      {[1, 2, 3, 4].map((num) => (
-        <option key={num} value={editingQuestion?.options?.[num - 1] || ''}>
-          Option {num}: {editingQuestion?.options?.[num - 1] || `Option ${num}`}
-        </option>
-      ))}
-    </select>
-  </div>
-
-  <div className="flex justify-end gap-3">
-    <button
-      type="button"
-      onClick={() => setShowForm(false)}
-      className="px-4 py-2 bg-gray-300 rounded"
-    >
-      Cancel
-    </button>
-    <button
-      type="submit"
-      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-    >
-      Save
-    </button>
-  </div>
-</form>
-
-
+              <AdminStatCard
+                label="Active Topics"
+                value={activeTopics}
+                icon={<Layers />}
+                color="bg-orange-50 text-orange-600"
+              />
             </div>
-          )}
-        </>
-      )}
-    </div>
+
+            {/* Quizzes Table */}
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+                <h3 className="font-black text-slate-800">
+                  Recently Created Quizzes
+                </h3>
+              </div>
+
+              <table className="w-full text-left">
+                <thead className="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+                  <tr>
+                    <th className="px-6 py-4">Title</th>
+                    <th className="px-6 py-4">Topic</th>
+                    <th className="px-6 py-4">Questions</th>
+                    <th className="px-6 py-4">Time</th>
+                    <th className="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-slate-100">
+                  {quizzes.map((quiz) => (
+                    <QuizRow
+                      key={quiz._id}
+                      title={quiz.title}
+                      topic={quiz.topic}
+                      count={quiz.questions?.length || 0}
+                      time={`${quiz.timeLimit}m`}
+                      onEdit={() =>
+                        navigate(`/admin/quizzes/edit/${quiz._id}`)
+                      }
+                    />
+                  ))}
+
+                  {quizzes.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="text-center py-6 text-slate-400 font-medium"
+                      >
+                        No quizzes created yet
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </div>
+    </AdminLayout>
   );
 };
 
+/* -------------------- Components -------------------- */
+
+const AdminStatCard = ({ label, value, icon, color }) => (
+  <div className="bg-white p-6 rounded-3xl border border-slate-200 flex items-center gap-5 shadow-sm">
+    <div className={`p-4 rounded-2xl ${color}`}>{icon}</div>
+    <div>
+      <p className="text-xs font-black text-slate-400 uppercase tracking-widest">
+        {label}
+      </p>
+      <p className="text-3xl font-black text-slate-900">{value}</p>
+    </div>
+  </div>
+);
+
+const QuizRow = ({ title, topic, count, time, onEdit }) => (
+  <tr className="hover:bg-slate-50 transition-colors">
+    <td className="px-6 py-4 font-bold text-slate-800">{title}</td>
+    <td className="px-6 py-4">
+      <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">
+        {topic}
+      </span>
+    </td>
+    <td className="px-6 py-4 text-sm font-medium text-slate-500">
+      {count} Qs
+    </td>
+    <td className="px-6 py-4 text-sm font-medium text-slate-500">
+      {time}
+    </td>
+    <td className="px-6 py-4 text-right">
+      <button
+        onClick={onEdit}
+        className="text-blue-600 font-bold text-xs hover:underline mr-4"
+      >
+        Edit
+      </button>
+      {/* <button className="text-red-500 font-bold text-xs hover:underline">
+        Delete
+      </button> */}
+    </td>
+  </tr>
+);
+
 export default AdminDashboard;
+

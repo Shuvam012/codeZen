@@ -93,13 +93,13 @@ const Footer = () => {
           <div className="flex flex-col items-start md:items-end">
             <h4 className="text-white font-bold mb-4 uppercase text-xs tracking-widest">Connect with us</h4>
             <div className="flex gap-4 mb-6">
-              <a href="https://github.com" target="_blank" rel="noreferrer" className="p-2 bg-slate-800 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+              <a href="https://github.com/Shuvam012" target="_blank" rel="noreferrer" className="p-2 bg-slate-800 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
                 <Github size={20} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-2 bg-slate-800 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+              <a href="https://www.linkedin.com/in/shuvam-biswal-43ab99215/" target="_blank" rel="noreferrer" className="p-2 bg-slate-800 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
                 <Linkedin size={20} />
               </a>
-              <a href="mailto:support@codezen.com" className="p-2 bg-slate-800 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+              <a href="mailto:shuvambiswal123@gmail.com" className="p-2 bg-slate-800 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
                 <Mail size={20} />
               </a>
             </div>

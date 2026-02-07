@@ -4,7 +4,11 @@ import {getLeaderboardByTopic,getMyStats} from "../controllers/leaderboardContro
 
 const router = express.Router();
 
-router.get("/:topic", getLeaderboardByTopic);
+// router.get("/:topic", getLeaderboardByTopic);
+// router.get("/me/stats", protect, getMyStats);
+
 router.get("/me/stats", protect, getMyStats);
+router.get("/:topic", getLeaderboardByTopic);
+
 
 export default router

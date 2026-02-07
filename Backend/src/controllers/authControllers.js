@@ -99,7 +99,7 @@ const register = async (req,res) =>{
     }
 
     // Generate JWT
-    const token = jwt.sign({ id: user._id ,role:user.role}, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.id ,role:user.role}, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
@@ -108,12 +108,13 @@ const register = async (req,res) =>{
       httpOnly: true,
     //   secure: process.env.NODE_ENV === "production",
       secure: false,
-      sameSite: "strict",
+      // sameSite: "strict",
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     res.status(200).json({
-      _id: user._id,
+      _id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
@@ -137,12 +138,13 @@ const logout = async (req, res) => {
   };
 
 
-  const getMe =(req,res) =>{
-    res.status(200).json({
-        id:req.user._id,
-        role:req.user.role
-    })
-  }
+ const getMe = (req, res) => {
+  res.status(200).json({
+    id: req.user.id,
+    role: req.user.role,
+  });
+};
+
 
 
 

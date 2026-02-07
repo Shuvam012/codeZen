@@ -20,7 +20,10 @@ import Leaderboard from '../pages/Leaderboard.jsx';
 // import AdminDashboard from '../pages/AdminDashboard';
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
 // import NotFound from '../pages/NotFound';
+import AddQuiz from '../pages/admin/AddQuiz.jsx';
 import NotFound from '../pages/NotFound.jsx';
+import AdminQuizzes from '../pages/admin/AdminQuizzes.jsx';
+import About from '../pages/About.jsx';
 
 const AppRoutes = () => {
     return (
@@ -28,6 +31,8 @@ const AppRoutes = () => {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+
+            <Route path="/about" element={<About />} />
 
 
             <Route path="/dashboard" element={<Dashboard />} />
@@ -41,6 +46,10 @@ const AppRoutes = () => {
 
             //admin
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/add-quiz" element={<AddQuiz />} />
+            <Route path="/admin/quizzes/edit/:id" element={<AddQuiz />} />
+            <Route path="/admin/quizzes" element={<AdminQuizzes />} />
+
 
 
             //fallback

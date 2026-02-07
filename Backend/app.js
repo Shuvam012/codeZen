@@ -15,13 +15,15 @@ import leaderboardRoutes from "./src/routes/leaderboardRoutes.js"
 connectDB()
 
 const app = express()
+app.use(cookieParser())
+app.use(express.json()) 
 
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }))
 
-app.use(cookieParser())
+
 
 
 
@@ -30,7 +32,7 @@ app.get('/' , (req, res)=>{
     res.send('hello world')
 })
 
-app.use(express.json()) // for parsing application/json
+// for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 
